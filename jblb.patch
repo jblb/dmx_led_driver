@@ -1,0 +1,36 @@
+diff --git a/arduino-mk/Arduino.mk b/arduino-mk/Arduino.mk
+index 96f2e1b..fb4bb32 100644
+--- a/arduino-mk/Arduino.mk
++++ b/arduino-mk/Arduino.mk
+@@ -409,7 +409,8 @@ ifdef ARDUINO_DIR
+         ifdef BUNDLED_AVR_TOOLS_DIR
+             AVR_TOOLS_DIR     = $(BUNDLED_AVR_TOOLS_DIR)
+             # The avrdude bundled with Arduino can't find it's config
+-            AVRDUDE_CONF	  = $(AVR_TOOLS_DIR)/etc/avrdude.conf
++            ## AVRDUDE_CONF = $(AVR_TOOLS_DIR)/etc/avrdude.conf
++            AVRDUDE_CONF = $(ARDUINO_DIR)/hardware/tools/avrdude.conf
+             $(call show_config_variable,AVR_TOOLS_DIR,[BUNDLED],(in Arduino distribution))
+ 
+         else
+@@ -895,6 +896,7 @@ ifndef AVRDUDE_CONF
+ ifndef AVR_TOOLS_DIR
+ # The avrdude bundled with Arduino can't find its config
+ AVRDUDE_CONF	  = $(AVR_TOOLS_DIR)/etc/avrdude.conf
++$(call show_config_variable,AVRDUDE_CONF,[JbLb])
+ endif
+ # If avrdude is installed separately, it can find its own config flie
+ endif
+diff --git a/bin/ard-reset-arduino b/bin/ard-reset-arduino
+index 085e442..c01939c 100755
+--- a/bin/ard-reset-arduino
++++ b/bin/ard-reset-arduino
+@@ -40,7 +40,8 @@ foreach my $dev (@ARGV)
+     die "Invalid pulse width ($dt), "
+       unless $dt > 0.0;
+     
+-    $p->pulse_dtr_on($dt * 1000.0);
++    # $p->pulse_dtr_on($dt * 1000.0);
++    $p->pulse_rts_on($dt * 1000.0);
+   }
+     
+ ## here endeth the main
