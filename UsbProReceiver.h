@@ -29,7 +29,7 @@
  */
 class UsbProReceiver {
   public:
-    UsbProReceiver(void (*callback)(byte label,
+    UsbProReceiver (void (*callback)(byte label,
                                     const byte *message,
                                     unsigned int size),
                    void (*idle_callback)());

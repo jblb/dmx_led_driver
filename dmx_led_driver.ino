@@ -7,6 +7,8 @@
 #include "UsbProSender.h"
 #include "WidgetSettings.h"
 #include "WidgetSettings.h"
+#include "Tlc5940.h"s
+
 
 // Define the variables from Common.h
 char DEVICE_NAME[] = "Arduino RGB driver";
@@ -15,6 +17,7 @@ char MANUFACTURER_NAME[] = "Open Lighting & Haum";
 byte MANUFACTURER_NAME_SIZE = sizeof(MANUFACTURER_NAME);
 
 UsbProSender sender;
+RDMHandler rdm_handler(&sender);
 
 // Pin constants
 const byte LED_PIN = 2;
@@ -60,6 +63,31 @@ void SendManufacturerResponse() {
   sender.SendMessageFooter();
 }
 
+/**
+ * Write the DMX values to the PWM pins.
+ * @param data the dmx data buffer.
+ * @param size the size of the dmx buffer.
+ */
+void SetPWM(const byte data[], unsigned int size) {
+  unsigned int start_address = WidgetSettings.StartAddress() - 1;
+  byte personality = WidgetSettings.Personality();
+
+  for (byte i = 0; i < 15 ; ++i) {
+    byte value = data[start_address + i];
+    long valueTLC = value << 4;
+    Tlc.set(i, valueTLC);
+  }
+}
+
+/**
+ * Called when there is no serial data
+ */
+void Idle() {
+  if (WidgetSettings.PerformWrite()) {
+    rdm_handler.QueueSetDeviceLabel();
+  }
+}
+
 /*
  * Called when a full message is recieved from the host.
  * @param label the message label.
@@ -79,7 +107,7 @@ void TakeAction(byte label, const byte *message, unsigned int message_size) {
         // 0 start code
         led_state = !led_state;
         digitalWrite(LED_PIN, led_state);
-        // SetPWM(&message[1], message_size);
+        SetPWM(&message[1], message_size);
        }
       break;
     case SERIAL_NUMBER_LABEL:
@@ -100,6 +128,7 @@ void TakeAction(byte label, const byte *message, unsigned int message_size) {
 
 
 void setup() {
+	Tlc.init();
 	WidgetSettings.Init();
 	byte personality = WidgetSettings.Personality();
 	
@@ -110,6 +139,6 @@ void setup() {
 	}
 	
 void loop() {
-	UsbProReceiver receiver(TakeAction);
+	UsbProReceiver receiver(TakeAction, Idle);
 	receiver.Read();
 	}
