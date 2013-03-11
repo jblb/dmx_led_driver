@@ -72,10 +72,11 @@ void SetPWM(const byte data[], unsigned int size) {
   unsigned int start_address = WidgetSettings.StartAddress() - 1;
   byte personality = WidgetSettings.Personality();
 
-  for (byte i = 0; i < 15 ; ++i) {
+  for (byte i = 0; i < 16 ; ++i) {
     byte value = data[start_address + i];
     long valueTLC = value << 4;
     Tlc.set(i, valueTLC);
+    Tlc.update();
   }
 }
 
@@ -120,7 +121,9 @@ void TakeAction(byte label, const byte *message, unsigned int message_size) {
       SendManufacturerResponse();
       break;
      case RDM_LABEL:
-      // HandleRDMMessage(message, message_size);
+      led_state = !led_state;
+      digitalWrite(LED_PIN, led_state);
+      rdm_handler.HandleRDMMessage(message, message_size);
       break;
   }
 }

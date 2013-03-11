@@ -1,0 +1,18 @@
+-------------------------
+Arduino.mk Configuration:
+-                      ARDUINO_DIR = /home/jerome/Documents/arduino-1.0.1 
+- [AUTODETECTED]       ARDUINO_VERSION = 101 
+- [BUNDLED]            AVR_TOOLS_DIR = /home/jerome/Documents/arduino-1.0.1/hardware/tools/avr (in Arduino distribution)
+- [COMPUTED]           ARDUINO_LIB_PATH = /home/jerome/Documents/arduino-1.0.1/libraries (from ARDUINO_DIR)
+- [USER]               ARDMK_DIR = /home/jerome/Documents/Arduino-Makefile 
+- [COMPUTED]           ARDMK_PATH = /home/jerome/Documents/Arduino-Makefile/bin (relative to ARDMK_DIR)
+- [AUTODETECTED]       ARDUINO_SKETCHBOOK = /home/jerome/Documents/sketchbook (in arduino preferences file)
+- [DEFAULT]            USER_LIB_PATH = /home/jerome/Documents/sketchbook/libraries (in user sketchbook)
+- [ASSUMED]            MONITOR_BAUDRATE = 9600 
+-                      BOARD_TAG = uno 
+- [AUTODETECTED]       Size utility: AVR-aware for enhanced output
+-
+-                      ARDUINO_LIBS =
+- [USER]                 Tlc5940
+-------------------------
+/home/jerome/Documents/arduino-1.0.1/hardware/tools/avr/bin/avr-g++ -c -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=101 -I. -I/home/jerome/Documents/arduino-1.0.1/hardware/arduino/cores/arduino -I/home/jerome/Documents/arduino-1.0.1/hardware/arduino/variants/standard  -I/home/jerome/Documents/sketchbook/libraries/Tlc5940 -g -Os -Wall -DUSB_VID= -DUSB_PID= -ffunction-sections -fdata-sections -fno-exceptions   build-uno/dmx_led_driver.cpp -o build-uno/dmx_led_driver.o
